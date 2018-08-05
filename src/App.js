@@ -1,20 +1,70 @@
 import React from 'react'
 import { Route, Link } from 'react-router-dom';
-// import * as BooksAPI from './BooksAPI'
-import './App.css'
+import * as BooksAPI from './BooksAPI';
+import './App.css';
+import Book from './Book.js';
+import Shelf from './Shelf.js';
 
 class BooksApp extends React.Component {
-  state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      allBooks: [{
+        title: '',
+        authors: [],
+        img: '',
+        shelf: '',
+        id: '',
+        imageLinks: {thumbnail: ''}
+      }],
+      shelves: () => {
+        return this.state.allBooks.reduce((acc, val) => {
+          if (!acc.includes(val.shelf)){
+            acc.push(val.shelf);
+          }
+          return acc;
+        }, [])
+      }
+    };
+    this.makeShelves = this.makeShelves.bind(this);
+  }
+  
+  makeShelves() {
+    let shelves = this.state.allBooks.reduce((acc, val) => {
+      if (!acc.includes(val.shelf)){
+        acc.push(val.shelf);
+      }
+      return acc;
+    }, []);
+    return shelves.map((shelf) => {
+      // return array with shelfId and array of books for that shelf
+      return  [ shelf, this.state.allBooks.filter((book) => book.shelf === shelf)]
+    })
   }
 
+  componentDidMount() {
+    BooksAPI.getAll()
+      .then((res) => {
+        this.setState(Object.assign({}, {allBooks: res}));
+        console.log(this.makeShelves())
+        console.log(this.state.shelves())
+      });
+  }
+
+
   render() {
+    const shelves = {
+      currentlyReading: 'Currently Reading',
+      wantToRead: 'Want to Read',
+      read: 'Read'
+    }
+    const allBooks = (this.state.allBooks[0]);
+    console.log('allBooks: ', allBooks, allBooks.title);
+    // for (let key in allBooks) {
+    //   console.log('key: ', key, allBooks[key]);
+    // }
+    // const wtf = Object.assign({}, allBooks)
+    // console.log(wtf.title)
     return (
       <div className="app">
         <Route path="/search" render={() => (
@@ -48,6 +98,10 @@ class BooksApp extends React.Component {
             <div className="list-books">
               <div className="list-books-title">
                 <h1>MyReads</h1>
+                {/* <Shelf shelfName={'testnameshelf'}  onChange={this.handleChange}/> */}
+                {this.makeShelves().map((v) => <Shelf booksOnShelf ={v[1]} shelfName={shelves[v[0]]}/>)}
+                {/* {this.state.allBooks[0].title } */}
+                {/* <Book book={this.state.allBooks[0]} onChange={this.handleChange} /> */}
               </div>
               <div className="list-books-content">
                 <div>
@@ -60,7 +114,7 @@ class BooksApp extends React.Component {
                             <div className="book-top">
                               <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")' }}></div>
                               <div className="book-shelf-changer">
-                                <select>
+                                <select value={this.state.value} onChange={this.handleChange}>
                                   <option value="move" disabled>Move to...</option>
                                   <option value="currentlyReading">Currently Reading</option>
                                   <option value="wantToRead">Want to Read</option>
