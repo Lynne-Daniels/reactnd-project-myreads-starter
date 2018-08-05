@@ -1,23 +1,26 @@
 import React from 'react';
+import * as BooksAPI from './BooksAPI';
 
 class Book extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {value: ''}
+    this.state = {value: 'none'}
     this.handleChange = this.handleChange.bind(this);
   }
   
   handleChange = (e) => {
     this.setState({value: e.target.value})
-    console.log('state: ', this.state.value, 'e.target.value: ', e.target.value) // , e.target.value
-    //BooksAPI.update(TODOBOOK, e.target.value); // pass book obj
+    console.log('state: ', this.state.value, 'e.target.value: ', e.target.value, 'this.props.book: ', this.props.book) // , e.target.value
+    console.log('calling update with: ', this.props.book.id, e.target.value)
+    BooksAPI.update({id: this.props.book.id}, e.target.value)
+      .then((res) => console.log('update res: ', res)); // pass book obj
 
   }
   render() {
     const { book, handleChange } = this.props;
     
-    
+  console.log('booksAPI')  
 
     return (
       <div>
@@ -30,7 +33,7 @@ class Book extends React.Component {
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
                 <option value="read">Read</option>
-                <option value="none">None</option>
+                <option selected value="none">None</option>
               </select>
             </div>
           </div>

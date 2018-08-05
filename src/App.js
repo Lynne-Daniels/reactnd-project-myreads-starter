@@ -60,11 +60,6 @@ class BooksApp extends React.Component {
     }
     const allBooks = (this.state.allBooks[0]);
     console.log('allBooks: ', allBooks, allBooks.title);
-    // for (let key in allBooks) {
-    //   console.log('key: ', key, allBooks[key]);
-    // }
-    // const wtf = Object.assign({}, allBooks)
-    // console.log(wtf.title)
     return (
       <div className="app">
         <Route path="/search" render={() => (
