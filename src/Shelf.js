@@ -5,12 +5,17 @@ class Shelf extends React.Component {
 
   render() {
     return (
-      <div>Shelf Component{this.props.shelfName}
-        {this.props.booksOnShelf.map((book) => {
-          return (
-            <li><Book book={book}  handleChange={this.handleChange}/></li>
-          )
-        })}
+      <div className="bookshelf">
+        <h2 className="bookshelf-title">{this.props.shelfName}</h2>
+        <div className="bookshelf-books">
+          <ol className="books-grid">
+            {this.props.booksOnShelf.map((book) => {
+              return (
+                <li><Book book={book}  handleChange={this.handleChange}/></li>
+              )
+            })}
+          </ol>
+        </div>
       </div>
     );
   }
