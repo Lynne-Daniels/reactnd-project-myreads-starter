@@ -29,6 +29,7 @@ class BooksApp extends React.Component {
       }
     };
     this.makeShelves = this.makeShelves.bind(this);
+    this.refreshShelves = this.refreshShelves.bind(this);
   }
   
   makeShelves() {
@@ -44,17 +45,18 @@ class BooksApp extends React.Component {
     })
   }
 
-
-
-  componentDidMount() {
+  refreshShelves() {
     BooksAPI.getAll()
-      .then((res) => {
-        this.setState(Object.assign({}, {allBooks: res}));
-        console.log(this.makeShelves())
-        console.log(this.state.shelves())
-      });
+    .then((res) => {
+      this.setState(Object.assign({}, {allBooks: res}));
+      console.log(this.makeShelves())
+      console.log(this.state.shelves())
+    });
   }
 
+  componentDidMount() {
+    this.refreshShelves();
+  }
 
   render() {
     const shelves = {
@@ -67,7 +69,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route path="/search" render={() => (
-          <Search />
+          <Search refreshShelves={this.refreshShelves} />
           ) 
         }/>
         
@@ -78,7 +80,7 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                {this.makeShelves().map((v) => <Shelf booksOnShelf ={v[1]} shelfName={shelves[v[0]]}/>)}
+                {this.makeShelves().map((v) => <Shelf booksOnShelf ={v[1]} shelfName={shelves[v[0]]} refresh={this.refreshShelves}/>)}
 
                 </div>
               </div>

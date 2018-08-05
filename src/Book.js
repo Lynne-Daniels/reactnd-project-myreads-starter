@@ -14,14 +14,16 @@ class Book extends React.Component {
     console.log('state: ', this.state.value, 'e.target.value: ', e.target.value, 'this.props.book: ', this.props.book) // , e.target.value
     console.log('calling update with: ', this.props.book.id, e.target.value)
     BooksAPI.update({id: this.props.book.id}, e.target.value)
-      .then((res) => console.log('update res: ', res)); // pass book obj
+      .then((res) => {
+        console.log('update res: ', res);
+        this.props.refreshShelves();
+      });
 
   }
   render() {
-    const { book, handleChange } = this.props;
-    
-  console.log('booksAPI')  
 
+    const { book } = this.props;
+     
     return (
       <div>
         <div className="book">

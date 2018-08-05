@@ -71,7 +71,7 @@ class Search extends React.Component {
 
         </div>
       </div>
-      <Shelf booksOnShelf={this.state.searchResults} shelfName="Search Results" />
+      <Shelf refreshShelves={this.props.refreshShelves} booksOnShelf={this.state.searchResults} shelfName="Search Results" />
     </div>
     )
   }
