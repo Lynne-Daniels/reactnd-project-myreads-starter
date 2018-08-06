@@ -66,7 +66,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route path="/search" render={() => (
-          <Search refreshShelves={this.refreshShelves} />
+          <Search allBooks={this.state.allBooks}refreshShelves={this.refreshShelves} />
           ) 
         }/>
         

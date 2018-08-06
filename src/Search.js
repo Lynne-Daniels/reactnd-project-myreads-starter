@@ -18,6 +18,20 @@ class Search extends React.Component {
     this.setState({searchTerm: e.target.value})
   }
 
+  updateShelves(books) {
+    return books.map((v) => {
+      console.log('adf ' , v.id, this.props.allBooks)
+      if (this.props.allBooks.filter((book) => {
+        return v.id === book.id
+      }).length > 0) {
+        v.shelf = this.props.allBooks.shelf
+      } else {
+        v.shelf = 'none';
+      }
+      return v;
+    })
+  }
+
   noResultBook = {
     title: 'No Results',
     authors: [],
@@ -31,7 +45,7 @@ class Search extends React.Component {
     BooksAPI.search(e)
       .then((res) => {
         if (res.length > 0) {
-          this.setState({searchResults: res})
+          this.setState({searchResults: this.updateShelves(res)})
         } else {
           this.setState({searchResults: [this.noResultBook]})
         }

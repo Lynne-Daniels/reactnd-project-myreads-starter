@@ -20,12 +20,12 @@ class Book extends React.Component {
   render() {
 
     const { book } = this.props;
-     
+    const placeholderImg = '/icons/placeholderImg.svg';
     return (
       <div>
         <div className="book">
           <div className="book-top">
-            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail?book.imageLinks.thumbnail:placeholderImg})` }}></div>
             <div className="book-shelf-changer">
               <select value={this.state.value} onChange={(e) => this.handleChange(e)}>
                 <option value="move" disabled>Move to...</option>
@@ -37,9 +37,9 @@ class Book extends React.Component {
             </div>
           </div>
           <div className="book-title">{book.title}</div>
-          <div className="book-authors">{book.authors.reduce((acc, val) => {
+          <div className="book-authors">{book.authors ? book.authors.reduce((acc, val) => {
             return `${acc} ${val}`
-          }, '')}</div>
+          }, '') : 'anon'}</div>
         </div>
       </div>
       
