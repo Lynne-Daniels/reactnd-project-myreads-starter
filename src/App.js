@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-import Book from './Book.js';
+// import Book from './Book.js';
 import Shelf from './Shelf.js';
 import Search from './Search';
 
@@ -49,8 +49,6 @@ class BooksApp extends React.Component {
     BooksAPI.getAll()
     .then((res) => {
       this.setState(Object.assign({}, {allBooks: res}));
-      console.log(this.makeShelves())
-      console.log(this.state.shelves())
     });
   }
 
@@ -64,8 +62,7 @@ class BooksApp extends React.Component {
       wantToRead: 'Want to Read',
       read: 'Read'
     }
-    const allBooks = (this.state.allBooks[0]);
-    console.log('allBooks: ', allBooks, allBooks.title);
+    
     return (
       <div className="app">
         <Route path="/search" render={() => (
@@ -80,7 +77,7 @@ class BooksApp extends React.Component {
               </div>
               <div className="list-books-content">
                 <div>
-                {this.makeShelves().map((v) => <Shelf booksOnShelf ={v[1]} shelfName={shelves[v[0]]} refresh={this.refreshShelves}/>)}
+                {this.makeShelves().map((v) => <Shelf key={v[0]} booksOnShelf ={v[1]} shelfName={shelves[v[0]]} refreshShelves={this.refreshShelves}/>)}
 
                 </div>
               </div>

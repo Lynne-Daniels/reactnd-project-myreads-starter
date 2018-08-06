@@ -5,17 +5,14 @@ class Book extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {value: 'none'}
+    this.state = {value: this.props.book.shelf}
     this.handleChange = this.handleChange.bind(this);
   }
   
   handleChange = (e) => {
     this.setState({value: e.target.value})
-    console.log('state: ', this.state.value, 'e.target.value: ', e.target.value, 'this.props.book: ', this.props.book) // , e.target.value
-    console.log('calling update with: ', this.props.book.id, e.target.value)
     BooksAPI.update({id: this.props.book.id}, e.target.value)
       .then((res) => {
-        console.log('update res: ', res);
         this.props.refreshShelves();
       });
 
@@ -35,7 +32,7 @@ class Book extends React.Component {
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
                 <option value="read">Read</option>
-                <option selected value="none">None</option>
+                <option value="none">None</option>
               </select>
             </div>
           </div>

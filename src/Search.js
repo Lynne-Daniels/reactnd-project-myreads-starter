@@ -2,7 +2,6 @@ import React from 'react';
 import * as BooksAPI from './BooksAPI';
 import { Link } from 'react-router-dom';
 import Shelf from './Shelf.js';
-import Book from './Book.js';
 
 class Search extends React.Component {
   constructor(props) {
@@ -29,11 +28,8 @@ class Search extends React.Component {
   }
 
   search(e) {
-    console.log(e)
-    // e.preventDefault();
     BooksAPI.search(e)
       .then((res) => {
-        console.log('search term: ', e, 'search res: ', res)
         if (res.length > 0) {
           this.setState({searchResults: res})
         } else {
@@ -43,7 +39,6 @@ class Search extends React.Component {
   }
 
   render() {
-        //  this.search('react')
     return (
       <div className="search-books">
       <div className="search-books-bar">
@@ -60,8 +55,6 @@ class Search extends React.Component {
             However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
             you don't find a specific author or title. Every search is limited by search terms.
           */}
-
-          {/* TODO make submit call API */}
           <form onSubmit={(e) => {
             e.preventDefault();
             this.search(this.state.searchTerm);
