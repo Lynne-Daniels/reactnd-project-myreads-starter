@@ -23,9 +23,7 @@ class Search extends React.Component {
     if (!books) {
       return [this.noResultBook];
     }
-    console.log('books: ', books);
     return books.map((v) => {
-      console.log('adf ' , v.id, this.props.allBooks)
       if (this.props.allBooks.filter((book) => {
         return v.id === book.id
       }).length > 0) {

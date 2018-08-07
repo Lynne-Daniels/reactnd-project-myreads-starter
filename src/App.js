@@ -2,7 +2,6 @@ import React from 'react'
 import { Route, Link } from 'react-router-dom';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
-// import Book from './Book.js';
 import Shelf from './Shelf.js';
 import Search from './Search';
 
@@ -48,7 +47,6 @@ class BooksApp extends React.Component {
   refreshShelves() {
     BooksAPI.getAll()
     .then((res) => {
-      console.log(res)
       this.setState(Object.assign({}, {allBooks: res}));
     });
   }
