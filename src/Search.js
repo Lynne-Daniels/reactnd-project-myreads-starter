@@ -7,18 +7,23 @@ class Search extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       searchTerm: '',
-      searchResults: []
+      searchResults: [],
+      prevResults: [this.noResultBook],
+      cachedSearchResults: // key = search term, val = search result
+        {'': [this.noResultBook]}
     }
     this.search = this.search.bind(this);
     this.updateSearchTerm = this.updateSearchTerm.bind(this);
   }
   
-  updateSearchTerm = (e) => {
-    this.setState({searchTerm: e.target.value})
-  }
-
+  
   updateShelves(books) {
+    if (!books) {
+      return [this.noResultBook];
+    }
+    console.log('books: ', books);
     return books.map((v) => {
       console.log('adf ' , v.id, this.props.allBooks)
       if (this.props.allBooks.filter((book) => {
@@ -31,7 +36,7 @@ class Search extends React.Component {
       return v;
     })
   }
-
+  
   noResultBook = {
     title: 'No Results',
     authors: [],
@@ -41,15 +46,60 @@ class Search extends React.Component {
     imageLinks: {thumbnail: ''}
   }
 
+  loadingBook = [{
+    title: 'Loading',
+    authors: [],
+    img: '',
+    shelf: '',
+    id: '',
+    imageLinks: {thumbnail: ''}
+  }]
+  
   search(e) {
     BooksAPI.search(e)
-      .then((res) => {
-        if (res.length > 0) {
-          this.setState({searchResults: this.updateShelves(res)})
-        } else {
-          this.setState({searchResults: [this.noResultBook]})
-        }
-      })
+    .then((res) => {
+      if (res.length > 0) {
+        this.setState({
+          searchResults: this.updateShelves(res),
+        })
+      } else {
+        this.setState({searchResults: [this.noResultBook]})
+      }
+    })
+  }
+  
+  fastSearch(e) {
+    const key = e.replace(/ /g,"_"); // Thanks https://stackoverflow.com/questions/441018/replacing-spaces-with-underscores-in-javascript
+    if (this.state.cachedSearchResults[e]) {
+      this.setState({loading: false})
+      return;
+    }
+    BooksAPI.search(e)
+    .then((res) => {
+      if (res.length > 0) {
+        this.setState({cachedSearchResults: {
+          ...this.state.cachedSearchResults,
+          [key]: res
+        },
+          loading: false})
+      } else {
+        this.setState({cachedSearchResults: {
+          ...this.state.cachedSearchResults,
+          [key]: [this.noResultBook]
+        },
+          loading: false})
+      }
+    })
+  }
+
+  updateSearchTerm = (e) => {
+    e.persist();
+    e.preventDefault();
+    this.setState({
+      loading: true,
+      searchTerm: e.target.value
+    })
+    this.fastSearch(e.target.value)
   }
 
   render() {
@@ -78,7 +128,7 @@ class Search extends React.Component {
 
         </div>
       </div>
-      <Shelf refreshShelves={this.props.refreshShelves} booksOnShelf={this.state.searchResults} shelfName="Search Results" />
+      <Shelf refreshShelves={this.props.refreshShelves} booksOnShelf={this.state.loading ? this.loadingBook : this.updateShelves(this.state.cachedSearchResults[this.state.searchTerm])} shelfName="Search Results" />
     </div>
     )
   }

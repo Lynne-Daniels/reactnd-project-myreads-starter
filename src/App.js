@@ -48,6 +48,7 @@ class BooksApp extends React.Component {
   refreshShelves() {
     BooksAPI.getAll()
     .then((res) => {
+      console.log(res)
       this.setState(Object.assign({}, {allBooks: res}));
     });
   }
@@ -66,7 +67,7 @@ class BooksApp extends React.Component {
     return (
       <div className="app">
         <Route path="/search" render={() => (
-          <Search allBooks={this.state.allBooks}refreshShelves={this.refreshShelves} />
+          <Search allBooks={this.state.allBooks} refreshShelves={this.refreshShelves} />
           ) 
         }/>
         
