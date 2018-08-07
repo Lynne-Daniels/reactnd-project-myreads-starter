@@ -24,10 +24,12 @@ class Search extends React.Component {
       return [this.noResultBook];
     }
     return books.map((v) => {
-      if (this.props.allBooks.filter((book) => {
+      const myBook = this.props.allBooks.filter((book) => {
         return v.id === book.id
-      }).length > 0) {
-        v.shelf = this.props.allBooks.shelf
+      })
+      if (myBook.length > 0) {
+        v.shelf = myBook[0].shelf;
+        console.log('shelf:' ,myBook[0].shelf, myBook[0].title);
       } else {
         v.shelf = 'none';
       }

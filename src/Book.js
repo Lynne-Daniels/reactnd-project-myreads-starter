@@ -20,7 +20,6 @@ class Book extends React.Component {
   render() {
 
     const { book } = this.props;
-    console.log(book);
     const placeholderImg = './icons/placeholderImg.svg';
     return (
       <div>
